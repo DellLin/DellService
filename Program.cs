@@ -1,27 +1,138 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers().AddNewtonsoftJson(
+    options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        // options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+    }
+);
+builder.Services.AddHttpClient();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Description = "Bearer Authentication with JWT Token",
+        Type = SecuritySchemeType.Http
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+        {
+            new OpenApiSecurityScheme {
+                Reference = new OpenApiReference {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List <string> ()
+        }
+    });
+});
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // 當驗證失敗時，回應標頭會包含 WWW-Authenticate 標頭，這裡會顯示失敗的詳細錯誤原因
+        options.IncludeErrorDetails = true; // 預設值為 true，有時會特別關閉
 
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            // 透過這項宣告，就可以從 "sub" 取值並設定給 User.Identity.Name
+            NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+            // 透過這項宣告，就可以從 "roles" 取值，並可讓 [Authorize] 判斷角色
+            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+
+            // 一般我們都會驗證 Issuer
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration.GetValue<string>("JwtSettings:Issuer"),
+
+            // 通常不太需要驗證 Audience
+            ValidateAudience = false,
+            //ValidAudience = "JwtAuthDemo", // 不驗證就不需要填寫
+
+            // 一般我們都會驗證 Token 的有效期間
+            ValidateLifetime = true,
+
+            // 如果 Token 中包含 key 才需要驗證，一般都只有簽章而已
+            ValidateIssuerSigningKey = false,
+
+            // "1234567890123456" 應該從 IConfiguration 取得
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JwtSettings:SignKey")))
+        };
+    });
+
+// builder.Services.AddSingleton(
+//     InitializeAccountClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+// builder.Services.AddSingleton(
+//     InitializeMessageLogClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
+builder.Services.AddSingleton<TokenService>();
+builder.Services.AddSingleton<AutoMapperService>();
+builder.Services.AddScoped<CosmosDBService>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<MessageLogService>();
+builder.Services.AddScoped<PttSpiderService>();
+builder.Services.AddScoped<PttCatchHistoryService>();
+builder.Services.AddScoped<LineLoginService>();
+builder.Services.AddScoped<LineNotifyService>();
+builder.Services.AddScoped<GoogleAuthService>();
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapFallbackToFile("index.html");;
+app.MapFallbackToFile("index.html"); ;
 
 app.Run();
+
+
+// static async Task<AccountService> InitializeAccountClientInstanceAsync(IConfigurationSection configurationSection)
+// {
+//     string databaseName = configurationSection.GetSection("DatabaseName").Value;
+//     string containerName = "account";
+//     string account = Environment.GetEnvironmentVariable("COSMOS_ENDPOINT") ?? "";
+//     string key = Environment.GetEnvironmentVariable("COSMOS_KEY") ?? "";
+//     Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+//     AccountService accountHelper = new AccountService(client, databaseName, containerName);
+//     Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+//     await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+
+//     return accountHelper;
+// }
+
+// static async Task<MessageLogService> InitializeMessageLogClientInstanceAsync(IConfigurationSection configurationSection)
+// {
+//     string databaseName = configurationSection.GetSection("DatabaseName").Value;
+//     string containerName = "messageLog";
+//     string account = Environment.GetEnvironmentVariable("COSMOS_ENDPOINT") ?? "";
+//     string key = Environment.GetEnvironmentVariable("COSMOS_KEY") ?? "";
+//     Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
+//     MessageLogService messageLogService = new MessageLogService(client, databaseName, containerName);
+//     Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
+//     await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
+
+//     return messageLogService;
+// }

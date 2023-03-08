@@ -6,6 +6,9 @@
     "DellOAuthHomework": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
         "@schematics/angular:application": {
           "strict": true
         }
@@ -27,8 +30,7 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -73,7 +75,7 @@
             },
             "development": {
               "browserTarget": "DellOAuthHomework:build:development",
-              "proxyConfig": "proxy.conf.js"
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

@@ -1,0 +1,13 @@
+{
+  "//": "Debug mode call different domain's Web API setting",
+  "/api": {
+    "target": "https://localhost:5501",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/files": {
+    "target": "https://localhost:5501",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

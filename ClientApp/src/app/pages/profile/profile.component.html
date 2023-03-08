@@ -1,0 +1,11 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card mb-0 flex justify-content-center">
+      <div>
+        <p-image [src]="account?.picture??''" width="300px" [preview]="true" imageClass="border-round"></p-image>
+        <h5>Name: {{account?.name??""}}</h5>
+        <button pButton pRipple icon="pi pi-sync" label="Sync Line Profile" class="p-button-success" (click)="onSyncLineProfileClick()"></button>
+      </div>
+    </div>
+  </div>
+</div>

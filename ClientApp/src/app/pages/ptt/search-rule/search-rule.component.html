@@ -1,0 +1,64 @@
+<div class="grid">
+
+  <div class="col-12">
+
+    <h3>Spider Rule</h3>
+    <div class="card mb-0">
+      <p-table [value]="products" styleClass="p-datatable-striped" [rowHover]="true" sortField="boardName" [sortOrder]="1" [paginator]="true" [rows]="15">
+        <ng-template pTemplate="caption" >
+          <div class="flex justify-content-between flex-column sm:flex-row">
+            <div>
+              <button pButton label="New" class="p-button mr-2" icon="pi pi-plus" (click)="onNewClick()"></button>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th></th>
+            <th pSortableColumn="boardName" >Board Name <p-sortIcon field="boardName"></p-sortIcon></th>
+            <th pSortableColumn="searchRegx">Search Key <p-sortIcon field="searchRegx"></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>
+              <button pButton class="p-button mr-2" icon="pi pi-pencil" (click)="onEditClick(product)"></button>
+              <button pButton class="p-button mr-2" icon="pi pi-trash" (click)="onDeleteClick(product)"></button>
+            </td>
+            <td>{{product.boardName}}</td>
+            <td>{{product.searchRegx}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+<p-dialog [(visible)]="itemEditDialog" header="New/Edit" [modal]="true" styleClass="col-12 md:col-8 lg:col-6 xl:col-4" [dismissableMask]="true">
+  <ng-template pTemplate="content">
+
+    <div class="surface-section">
+      <div class="font-medium text-3xl text-900 mb-3"></div>
+      <div class="text-500 mb-5"></div>
+        <form (submit)="onSaveClick()" [formGroup]="editItemForm">
+          <ul class="list-none p-0 m-0">
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-3 font-medium">Board Name</div>
+              <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                <input pInputText class="w-full" rows="2" [formControl]="editItemForm.controls.BoardName" />
+              </div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <div class="text-500 w-6 md:w-3 font-medium">Search Key</div>
+              <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                <input pInputText class="w-full" rows="2" [formControl]="editItemForm.controls.SearchRegx" />
+              </div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+              <button pButton label="Save" class="flex w-full" [disabled]="!editItemForm.valid"></button>
+            </li>
+          </ul>
+        </form>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

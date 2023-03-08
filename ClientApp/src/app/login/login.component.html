@@ -1,0 +1,25 @@
+<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+  <div class="flex flex-column align-items-center justify-content-center">
+    <div class="w-full surface-card py-8 px-5 sm:px-8 shadow-2" style="border-radius:53px">
+      <div class="text-center mb-5">
+        <div class="text-900 text-3xl font-medium mb-3">Dell Service</div>
+        <span class="text-600 font-medium">Sign in to continue</span>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <button pButton pRipple label="Line" class="w-full p-3 text-xl p-button-raised p-button-success" (click)="onLineSinginCLick()"><i
+              class="pi pi-plus" style="font-size: 2rem"></i></button>
+        </div>
+<!--
+        <div class="col-12">
+          <button pButton pRipple label="Apple" class="w-full p-3 text-xl p-button-raised p-button-secondary"><i
+              class="pi pi-apple" style="font-size: 2rem"></i></button>
+        </div> -->
+        <div class="col-12">
+          <button pButton pRipple label="Google" class="w-full p-3 text-xl p-button-raised" (click)="onGoogleSinginClick()"><i
+              class="pi pi-google" style="font-size: 2rem"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

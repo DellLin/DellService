@@ -1,0 +1,13 @@
+<div class="grid">
+
+  <div class="col-12">
+
+    <div class="card mb-0">
+      <h5>Line Notify Subscribe</h5>
+      <p-selectButton [options]="stateOptions" [(ngModel)]="lineNotifyState" [disabled]="pageloading" optionLabel="label" optionValue="value" (onChange)="onLineNotifyStateChange()"></p-selectButton>
+      <h5>Send message</h5>
+      <textarea pInputTextarea class="w-full" [(ngModel)]="message" [disabled]="!lineNotifyState||pageloading"></textarea>
+      <button pButton pRipple label="Send" (click)="onSendMessageClick()" [disabled]="!lineNotifyState||pageloading"></button>
+    </div>
+  </div>
+</div>
