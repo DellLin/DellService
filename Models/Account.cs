@@ -47,5 +47,7 @@ public class Account
 
     [JsonProperty("googlePicture")]
     public string? GooglePicture { get; set; }
+    [JsonProperty("lineBotUserId")]
+    public string? LineBotUserId { get; set; }
 
 }
