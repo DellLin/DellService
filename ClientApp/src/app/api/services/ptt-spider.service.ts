@@ -1,30 +1,39 @@
 /* tslint:disable */
 /* eslint-disable */
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
-import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
 
+import { apiPttSpiderDelete$Json } from '../fn/ptt-spider/api-ptt-spider-delete-json';
+import { ApiPttSpiderDelete$Json$Params } from '../fn/ptt-spider/api-ptt-spider-delete-json';
+import { apiPttSpiderDelete$Plain } from '../fn/ptt-spider/api-ptt-spider-delete-plain';
+import { ApiPttSpiderDelete$Plain$Params } from '../fn/ptt-spider/api-ptt-spider-delete-plain';
+import { apiPttSpiderGet$Json } from '../fn/ptt-spider/api-ptt-spider-get-json';
+import { ApiPttSpiderGet$Json$Params } from '../fn/ptt-spider/api-ptt-spider-get-json';
+import { apiPttSpiderGet$Plain } from '../fn/ptt-spider/api-ptt-spider-get-plain';
+import { ApiPttSpiderGet$Plain$Params } from '../fn/ptt-spider/api-ptt-spider-get-plain';
+import { apiPttSpiderPost$Json } from '../fn/ptt-spider/api-ptt-spider-post-json';
+import { ApiPttSpiderPost$Json$Params } from '../fn/ptt-spider/api-ptt-spider-post-json';
+import { apiPttSpiderPost$Plain } from '../fn/ptt-spider/api-ptt-spider-post-plain';
+import { ApiPttSpiderPost$Plain$Params } from '../fn/ptt-spider/api-ptt-spider-post-plain';
+import { apiPttSpiderPut$Json } from '../fn/ptt-spider/api-ptt-spider-put-json';
+import { ApiPttSpiderPut$Json$Params } from '../fn/ptt-spider/api-ptt-spider-put-json';
+import { apiPttSpiderPut$Plain } from '../fn/ptt-spider/api-ptt-spider-put-plain';
+import { ApiPttSpiderPut$Plain$Params } from '../fn/ptt-spider/api-ptt-spider-put-plain';
 import { PttSearchRule } from '../models/ptt-search-rule';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class PttSpiderService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
-  /**
-   * Path part for operation apiPttSpiderGet
-   */
+  /** Path part for operation `apiPttSpiderGet()` */
   static readonly ApiPttSpiderGetPath = '/api/PttSpider';
 
   /**
@@ -33,35 +42,19 @@ export class PttSpiderService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiPttSpiderGet$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<Array<PttSearchRule>>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PttSpiderService.ApiPttSpiderGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<PttSearchRule>>;
-      })
-    );
+  apiPttSpiderGet$Plain$Response(params?: ApiPttSpiderGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PttSearchRule>>> {
+    return apiPttSpiderGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiPttSpiderGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiPttSpiderGet$Plain(params?: {
-  }): Observable<Array<PttSearchRule>> {
-
-    return this.apiPttSpiderGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<PttSearchRule>>) => r.body as Array<PttSearchRule>)
+  apiPttSpiderGet$Plain(params?: ApiPttSpiderGet$Plain$Params, context?: HttpContext): Observable<Array<PttSearchRule>> {
+    return this.apiPttSpiderGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<PttSearchRule>>): Array<PttSearchRule> => r.body)
     );
   }
 
@@ -71,41 +64,23 @@ export class PttSpiderService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiPttSpiderGet$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<Array<PttSearchRule>>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PttSpiderService.ApiPttSpiderGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<PttSearchRule>>;
-      })
-    );
+  apiPttSpiderGet$Json$Response(params?: ApiPttSpiderGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PttSearchRule>>> {
+    return apiPttSpiderGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiPttSpiderGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiPttSpiderGet$Json(params?: {
-  }): Observable<Array<PttSearchRule>> {
-
-    return this.apiPttSpiderGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<PttSearchRule>>) => r.body as Array<PttSearchRule>)
+  apiPttSpiderGet$Json(params?: ApiPttSpiderGet$Json$Params, context?: HttpContext): Observable<Array<PttSearchRule>> {
+    return this.apiPttSpiderGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<PttSearchRule>>): Array<PttSearchRule> => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiPttSpiderPut
-   */
+  /** Path part for operation `apiPttSpiderPut()` */
   static readonly ApiPttSpiderPutPath = '/api/PttSpider';
 
   /**
@@ -114,38 +89,19 @@ export class PttSpiderService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderPut$Plain$Response(params?: {
-    body?: PttSearchRule
-  }): Observable<StrictHttpResponse<PttSearchRule>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PttSpiderService.ApiPttSpiderPutPath, 'put');
-    if (params) {
-      rb.body(params.body, 'application/*+json');
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PttSearchRule>;
-      })
-    );
+  apiPttSpiderPut$Plain$Response(params?: ApiPttSpiderPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<PttSearchRule>> {
+    return apiPttSpiderPut$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiPttSpiderPut$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderPut$Plain(params?: {
-    body?: PttSearchRule
-  }): Observable<PttSearchRule> {
-
-    return this.apiPttSpiderPut$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<PttSearchRule>) => r.body as PttSearchRule)
+  apiPttSpiderPut$Plain(params?: ApiPttSpiderPut$Plain$Params, context?: HttpContext): Observable<PttSearchRule> {
+    return this.apiPttSpiderPut$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PttSearchRule>): PttSearchRule => r.body)
     );
   }
 
@@ -155,44 +111,23 @@ export class PttSpiderService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderPut$Json$Response(params?: {
-    body?: PttSearchRule
-  }): Observable<StrictHttpResponse<PttSearchRule>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PttSpiderService.ApiPttSpiderPutPath, 'put');
-    if (params) {
-      rb.body(params.body, 'application/*+json');
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PttSearchRule>;
-      })
-    );
+  apiPttSpiderPut$Json$Response(params?: ApiPttSpiderPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<PttSearchRule>> {
+    return apiPttSpiderPut$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiPttSpiderPut$Json$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderPut$Json(params?: {
-    body?: PttSearchRule
-  }): Observable<PttSearchRule> {
-
-    return this.apiPttSpiderPut$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<PttSearchRule>) => r.body as PttSearchRule)
+  apiPttSpiderPut$Json(params?: ApiPttSpiderPut$Json$Params, context?: HttpContext): Observable<PttSearchRule> {
+    return this.apiPttSpiderPut$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PttSearchRule>): PttSearchRule => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiPttSpiderPost
-   */
+  /** Path part for operation `apiPttSpiderPost()` */
   static readonly ApiPttSpiderPostPath = '/api/PttSpider';
 
   /**
@@ -201,38 +136,19 @@ export class PttSpiderService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderPost$Plain$Response(params?: {
-    body?: PttSearchRule
-  }): Observable<StrictHttpResponse<PttSearchRule>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PttSpiderService.ApiPttSpiderPostPath, 'post');
-    if (params) {
-      rb.body(params.body, 'application/*+json');
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PttSearchRule>;
-      })
-    );
+  apiPttSpiderPost$Plain$Response(params?: ApiPttSpiderPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<PttSearchRule>> {
+    return apiPttSpiderPost$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiPttSpiderPost$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderPost$Plain(params?: {
-    body?: PttSearchRule
-  }): Observable<PttSearchRule> {
-
-    return this.apiPttSpiderPost$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<PttSearchRule>) => r.body as PttSearchRule)
+  apiPttSpiderPost$Plain(params?: ApiPttSpiderPost$Plain$Params, context?: HttpContext): Observable<PttSearchRule> {
+    return this.apiPttSpiderPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PttSearchRule>): PttSearchRule => r.body)
     );
   }
 
@@ -242,44 +158,23 @@ export class PttSpiderService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderPost$Json$Response(params?: {
-    body?: PttSearchRule
-  }): Observable<StrictHttpResponse<PttSearchRule>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PttSpiderService.ApiPttSpiderPostPath, 'post');
-    if (params) {
-      rb.body(params.body, 'application/*+json');
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<PttSearchRule>;
-      })
-    );
+  apiPttSpiderPost$Json$Response(params?: ApiPttSpiderPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<PttSearchRule>> {
+    return apiPttSpiderPost$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiPttSpiderPost$Json$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderPost$Json(params?: {
-    body?: PttSearchRule
-  }): Observable<PttSearchRule> {
-
-    return this.apiPttSpiderPost$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<PttSearchRule>) => r.body as PttSearchRule)
+  apiPttSpiderPost$Json(params?: ApiPttSpiderPost$Json$Params, context?: HttpContext): Observable<PttSearchRule> {
+    return this.apiPttSpiderPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PttSearchRule>): PttSearchRule => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiPttSpiderDelete
-   */
+  /** Path part for operation `apiPttSpiderDelete()` */
   static readonly ApiPttSpiderDeletePath = '/api/PttSpider';
 
   /**
@@ -288,38 +183,19 @@ export class PttSpiderService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderDelete$Plain$Response(params?: {
-    body?: PttSearchRule
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PttSpiderService.ApiPttSpiderDeletePath, 'delete');
-    if (params) {
-      rb.body(params.body, 'application/*+json');
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiPttSpiderDelete$Plain$Response(params?: ApiPttSpiderDelete$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiPttSpiderDelete$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiPttSpiderDelete$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderDelete$Plain(params?: {
-    body?: PttSearchRule
-  }): Observable<boolean> {
-
-    return this.apiPttSpiderDelete$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiPttSpiderDelete$Plain(params?: ApiPttSpiderDelete$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiPttSpiderDelete$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
@@ -329,38 +205,19 @@ export class PttSpiderService extends BaseService {
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderDelete$Json$Response(params?: {
-    body?: PttSearchRule
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, PttSpiderService.ApiPttSpiderDeletePath, 'delete');
-    if (params) {
-      rb.body(params.body, 'application/*+json');
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiPttSpiderDelete$Json$Response(params?: ApiPttSpiderDelete$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiPttSpiderDelete$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiPttSpiderDelete$Json$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiPttSpiderDelete$Json(params?: {
-    body?: PttSearchRule
-  }): Observable<boolean> {
-
-    return this.apiPttSpiderDelete$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiPttSpiderDelete$Json(params?: ApiPttSpiderDelete$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiPttSpiderDelete$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

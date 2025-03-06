@@ -1,30 +1,33 @@
 /* tslint:disable */
 /* eslint-disable */
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
-import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
 
 import { AccountViewModel } from '../models/account-view-model';
+import { apiLineLoginLineLoginCallBackGet } from '../fn/line-login/api-line-login-line-login-call-back-get';
+import { ApiLineLoginLineLoginCallBackGet$Params } from '../fn/line-login/api-line-login-line-login-call-back-get';
+import { apiLineLoginLineLoginGet$Json } from '../fn/line-login/api-line-login-line-login-get-json';
+import { ApiLineLoginLineLoginGet$Json$Params } from '../fn/line-login/api-line-login-line-login-get-json';
+import { apiLineLoginLineLoginGet$Plain } from '../fn/line-login/api-line-login-line-login-get-plain';
+import { ApiLineLoginLineLoginGet$Plain$Params } from '../fn/line-login/api-line-login-line-login-get-plain';
+import { apiLineLoginSyncLineProfileGet$Json } from '../fn/line-login/api-line-login-sync-line-profile-get-json';
+import { ApiLineLoginSyncLineProfileGet$Json$Params } from '../fn/line-login/api-line-login-sync-line-profile-get-json';
+import { apiLineLoginSyncLineProfileGet$Plain } from '../fn/line-login/api-line-login-sync-line-profile-get-plain';
+import { ApiLineLoginSyncLineProfileGet$Plain$Params } from '../fn/line-login/api-line-login-sync-line-profile-get-plain';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class LineLoginService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
-  /**
-   * Path part for operation apiLineLoginLineLoginGet
-   */
+  /** Path part for operation `apiLineLoginLineLoginGet()` */
   static readonly ApiLineLoginLineLoginGetPath = '/api/LineLogin/LineLogin';
 
   /**
@@ -33,35 +36,19 @@ export class LineLoginService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginLineLoginGet$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<string>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineLoginService.ApiLineLoginLineLoginGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<string>;
-      })
-    );
+  apiLineLoginLineLoginGet$Plain$Response(params?: ApiLineLoginLineLoginGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return apiLineLoginLineLoginGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineLoginLineLoginGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginLineLoginGet$Plain(params?: {
-  }): Observable<string> {
-
-    return this.apiLineLoginLineLoginGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
+  apiLineLoginLineLoginGet$Plain(params?: ApiLineLoginLineLoginGet$Plain$Params, context?: HttpContext): Observable<string> {
+    return this.apiLineLoginLineLoginGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
@@ -71,41 +58,23 @@ export class LineLoginService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginLineLoginGet$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<string>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineLoginService.ApiLineLoginLineLoginGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<string>;
-      })
-    );
+  apiLineLoginLineLoginGet$Json$Response(params?: ApiLineLoginLineLoginGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return apiLineLoginLineLoginGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineLoginLineLoginGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginLineLoginGet$Json(params?: {
-  }): Observable<string> {
-
-    return this.apiLineLoginLineLoginGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
+  apiLineLoginLineLoginGet$Json(params?: ApiLineLoginLineLoginGet$Json$Params, context?: HttpContext): Observable<string> {
+    return this.apiLineLoginLineLoginGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiLineLoginLineLoginCallBackGet
-   */
+  /** Path part for operation `apiLineLoginLineLoginCallBackGet()` */
   static readonly ApiLineLoginLineLoginCallBackGetPath = '/api/LineLogin/LineLoginCallBack';
 
   /**
@@ -114,44 +83,23 @@ export class LineLoginService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginLineLoginCallBackGet$Response(params?: {
-    code?: string;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineLoginService.ApiLineLoginLineLoginCallBackGetPath, 'get');
-    if (params) {
-      rb.query('code', params.code, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+  apiLineLoginLineLoginCallBackGet$Response(params?: ApiLineLoginLineLoginCallBackGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return apiLineLoginLineLoginCallBackGet(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineLoginLineLoginCallBackGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginLineLoginCallBackGet(params?: {
-    code?: string;
-  }): Observable<void> {
-
-    return this.apiLineLoginLineLoginCallBackGet$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+  apiLineLoginLineLoginCallBackGet(params?: ApiLineLoginLineLoginCallBackGet$Params, context?: HttpContext): Observable<void> {
+    return this.apiLineLoginLineLoginCallBackGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiLineLoginSyncLineProfileGet
-   */
+  /** Path part for operation `apiLineLoginSyncLineProfileGet()` */
   static readonly ApiLineLoginSyncLineProfileGetPath = '/api/LineLogin/SyncLineProfile';
 
   /**
@@ -160,35 +108,19 @@ export class LineLoginService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginSyncLineProfileGet$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<AccountViewModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineLoginService.ApiLineLoginSyncLineProfileGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AccountViewModel>;
-      })
-    );
+  apiLineLoginSyncLineProfileGet$Plain$Response(params?: ApiLineLoginSyncLineProfileGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<AccountViewModel>> {
+    return apiLineLoginSyncLineProfileGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineLoginSyncLineProfileGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginSyncLineProfileGet$Plain(params?: {
-  }): Observable<AccountViewModel> {
-
-    return this.apiLineLoginSyncLineProfileGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<AccountViewModel>) => r.body as AccountViewModel)
+  apiLineLoginSyncLineProfileGet$Plain(params?: ApiLineLoginSyncLineProfileGet$Plain$Params, context?: HttpContext): Observable<AccountViewModel> {
+    return this.apiLineLoginSyncLineProfileGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<AccountViewModel>): AccountViewModel => r.body)
     );
   }
 
@@ -198,35 +130,19 @@ export class LineLoginService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginSyncLineProfileGet$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<AccountViewModel>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineLoginService.ApiLineLoginSyncLineProfileGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<AccountViewModel>;
-      })
-    );
+  apiLineLoginSyncLineProfileGet$Json$Response(params?: ApiLineLoginSyncLineProfileGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<AccountViewModel>> {
+    return apiLineLoginSyncLineProfileGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineLoginSyncLineProfileGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginSyncLineProfileGet$Json(params?: {
-  }): Observable<AccountViewModel> {
-
-    return this.apiLineLoginSyncLineProfileGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<AccountViewModel>) => r.body as AccountViewModel)
+  apiLineLoginSyncLineProfileGet$Json(params?: ApiLineLoginSyncLineProfileGet$Json$Params, context?: HttpContext): Observable<AccountViewModel> {
+    return this.apiLineLoginSyncLineProfileGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<AccountViewModel>): AccountViewModel => r.body)
     );
   }
 

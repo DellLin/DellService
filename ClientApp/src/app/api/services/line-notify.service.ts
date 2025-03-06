@@ -1,29 +1,44 @@
 /* tslint:disable */
 /* eslint-disable */
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
-import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
 
+import { apiLineNotifyGetStateGet$Json } from '../fn/line-notify/api-line-notify-get-state-get-json';
+import { ApiLineNotifyGetStateGet$Json$Params } from '../fn/line-notify/api-line-notify-get-state-get-json';
+import { apiLineNotifyGetStateGet$Plain } from '../fn/line-notify/api-line-notify-get-state-get-plain';
+import { ApiLineNotifyGetStateGet$Plain$Params } from '../fn/line-notify/api-line-notify-get-state-get-plain';
+import { apiLineNotifyLineNotifyAuthGet$Json } from '../fn/line-notify/api-line-notify-line-notify-auth-get-json';
+import { ApiLineNotifyLineNotifyAuthGet$Json$Params } from '../fn/line-notify/api-line-notify-line-notify-auth-get-json';
+import { apiLineNotifyLineNotifyAuthGet$Plain } from '../fn/line-notify/api-line-notify-line-notify-auth-get-plain';
+import { ApiLineNotifyLineNotifyAuthGet$Plain$Params } from '../fn/line-notify/api-line-notify-line-notify-auth-get-plain';
+import { apiLineNotifyLineNotifyCallBackGet } from '../fn/line-notify/api-line-notify-line-notify-call-back-get';
+import { ApiLineNotifyLineNotifyCallBackGet$Params } from '../fn/line-notify/api-line-notify-line-notify-call-back-get';
+import { apiLineNotifyRevokeGet$Json } from '../fn/line-notify/api-line-notify-revoke-get-json';
+import { ApiLineNotifyRevokeGet$Json$Params } from '../fn/line-notify/api-line-notify-revoke-get-json';
+import { apiLineNotifyRevokeGet$Plain } from '../fn/line-notify/api-line-notify-revoke-get-plain';
+import { ApiLineNotifyRevokeGet$Plain$Params } from '../fn/line-notify/api-line-notify-revoke-get-plain';
+import { apiLineNotifySendMessagetoAllPost$Json } from '../fn/line-notify/api-line-notify-send-messageto-all-post-json';
+import { ApiLineNotifySendMessagetoAllPost$Json$Params } from '../fn/line-notify/api-line-notify-send-messageto-all-post-json';
+import { apiLineNotifySendMessagetoAllPost$Plain } from '../fn/line-notify/api-line-notify-send-messageto-all-post-plain';
+import { ApiLineNotifySendMessagetoAllPost$Plain$Params } from '../fn/line-notify/api-line-notify-send-messageto-all-post-plain';
+import { apiLineNotifySendMessagetoSelfPost$Json } from '../fn/line-notify/api-line-notify-send-messageto-self-post-json';
+import { ApiLineNotifySendMessagetoSelfPost$Json$Params } from '../fn/line-notify/api-line-notify-send-messageto-self-post-json';
+import { apiLineNotifySendMessagetoSelfPost$Plain } from '../fn/line-notify/api-line-notify-send-messageto-self-post-plain';
+import { ApiLineNotifySendMessagetoSelfPost$Plain$Params } from '../fn/line-notify/api-line-notify-send-messageto-self-post-plain';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class LineNotifyService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
-  /**
-   * Path part for operation apiLineNotifyLineNotifyAuthGet
-   */
+  /** Path part for operation `apiLineNotifyLineNotifyAuthGet()` */
   static readonly ApiLineNotifyLineNotifyAuthGetPath = '/api/LineNotify/LineNotifyAuth';
 
   /**
@@ -32,35 +47,19 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyLineNotifyAuthGet$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<string>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifyLineNotifyAuthGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<string>;
-      })
-    );
+  apiLineNotifyLineNotifyAuthGet$Plain$Response(params?: ApiLineNotifyLineNotifyAuthGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return apiLineNotifyLineNotifyAuthGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifyLineNotifyAuthGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyLineNotifyAuthGet$Plain(params?: {
-  }): Observable<string> {
-
-    return this.apiLineNotifyLineNotifyAuthGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
+  apiLineNotifyLineNotifyAuthGet$Plain(params?: ApiLineNotifyLineNotifyAuthGet$Plain$Params, context?: HttpContext): Observable<string> {
+    return this.apiLineNotifyLineNotifyAuthGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
@@ -70,41 +69,23 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyLineNotifyAuthGet$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<string>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifyLineNotifyAuthGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<string>;
-      })
-    );
+  apiLineNotifyLineNotifyAuthGet$Json$Response(params?: ApiLineNotifyLineNotifyAuthGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return apiLineNotifyLineNotifyAuthGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifyLineNotifyAuthGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyLineNotifyAuthGet$Json(params?: {
-  }): Observable<string> {
-
-    return this.apiLineNotifyLineNotifyAuthGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
+  apiLineNotifyLineNotifyAuthGet$Json(params?: ApiLineNotifyLineNotifyAuthGet$Json$Params, context?: HttpContext): Observable<string> {
+    return this.apiLineNotifyLineNotifyAuthGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiLineNotifyLineNotifyCallBackGet
-   */
+  /** Path part for operation `apiLineNotifyLineNotifyCallBackGet()` */
   static readonly ApiLineNotifyLineNotifyCallBackGetPath = '/api/LineNotify/LineNotifyCallBack';
 
   /**
@@ -113,44 +94,23 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyLineNotifyCallBackGet$Response(params?: {
-    code?: string;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifyLineNotifyCallBackGetPath, 'get');
-    if (params) {
-      rb.query('code', params.code, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+  apiLineNotifyLineNotifyCallBackGet$Response(params?: ApiLineNotifyLineNotifyCallBackGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return apiLineNotifyLineNotifyCallBackGet(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifyLineNotifyCallBackGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyLineNotifyCallBackGet(params?: {
-    code?: string;
-  }): Observable<void> {
-
-    return this.apiLineNotifyLineNotifyCallBackGet$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+  apiLineNotifyLineNotifyCallBackGet(params?: ApiLineNotifyLineNotifyCallBackGet$Params, context?: HttpContext): Observable<void> {
+    return this.apiLineNotifyLineNotifyCallBackGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiLineNotifyGetStateGet
-   */
+  /** Path part for operation `apiLineNotifyGetStateGet()` */
   static readonly ApiLineNotifyGetStateGetPath = '/api/LineNotify/GetState';
 
   /**
@@ -159,35 +119,19 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyGetStateGet$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifyGetStateGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiLineNotifyGetStateGet$Plain$Response(params?: ApiLineNotifyGetStateGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiLineNotifyGetStateGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifyGetStateGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyGetStateGet$Plain(params?: {
-  }): Observable<boolean> {
-
-    return this.apiLineNotifyGetStateGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiLineNotifyGetStateGet$Plain(params?: ApiLineNotifyGetStateGet$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiLineNotifyGetStateGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
@@ -197,41 +141,23 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyGetStateGet$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifyGetStateGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiLineNotifyGetStateGet$Json$Response(params?: ApiLineNotifyGetStateGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiLineNotifyGetStateGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifyGetStateGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyGetStateGet$Json(params?: {
-  }): Observable<boolean> {
-
-    return this.apiLineNotifyGetStateGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiLineNotifyGetStateGet$Json(params?: ApiLineNotifyGetStateGet$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiLineNotifyGetStateGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiLineNotifyRevokeGet
-   */
+  /** Path part for operation `apiLineNotifyRevokeGet()` */
   static readonly ApiLineNotifyRevokeGetPath = '/api/LineNotify/Revoke';
 
   /**
@@ -240,35 +166,19 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyRevokeGet$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifyRevokeGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiLineNotifyRevokeGet$Plain$Response(params?: ApiLineNotifyRevokeGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiLineNotifyRevokeGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifyRevokeGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyRevokeGet$Plain(params?: {
-  }): Observable<boolean> {
-
-    return this.apiLineNotifyRevokeGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiLineNotifyRevokeGet$Plain(params?: ApiLineNotifyRevokeGet$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiLineNotifyRevokeGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
@@ -278,41 +188,23 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyRevokeGet$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifyRevokeGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiLineNotifyRevokeGet$Json$Response(params?: ApiLineNotifyRevokeGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiLineNotifyRevokeGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifyRevokeGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifyRevokeGet$Json(params?: {
-  }): Observable<boolean> {
-
-    return this.apiLineNotifyRevokeGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiLineNotifyRevokeGet$Json(params?: ApiLineNotifyRevokeGet$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiLineNotifyRevokeGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiLineNotifySendMessagetoSelfPost
-   */
+  /** Path part for operation `apiLineNotifySendMessagetoSelfPost()` */
   static readonly ApiLineNotifySendMessagetoSelfPostPath = '/api/LineNotify/SendMessagetoSelf';
 
   /**
@@ -321,38 +213,19 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifySendMessagetoSelfPost$Plain$Response(params?: {
-    message?: string;
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifySendMessagetoSelfPostPath, 'post');
-    if (params) {
-      rb.query('message', params.message, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiLineNotifySendMessagetoSelfPost$Plain$Response(params?: ApiLineNotifySendMessagetoSelfPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiLineNotifySendMessagetoSelfPost$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifySendMessagetoSelfPost$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifySendMessagetoSelfPost$Plain(params?: {
-    message?: string;
-  }): Observable<boolean> {
-
-    return this.apiLineNotifySendMessagetoSelfPost$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiLineNotifySendMessagetoSelfPost$Plain(params?: ApiLineNotifySendMessagetoSelfPost$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiLineNotifySendMessagetoSelfPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
@@ -362,44 +235,23 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifySendMessagetoSelfPost$Json$Response(params?: {
-    message?: string;
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifySendMessagetoSelfPostPath, 'post');
-    if (params) {
-      rb.query('message', params.message, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiLineNotifySendMessagetoSelfPost$Json$Response(params?: ApiLineNotifySendMessagetoSelfPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiLineNotifySendMessagetoSelfPost$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifySendMessagetoSelfPost$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifySendMessagetoSelfPost$Json(params?: {
-    message?: string;
-  }): Observable<boolean> {
-
-    return this.apiLineNotifySendMessagetoSelfPost$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiLineNotifySendMessagetoSelfPost$Json(params?: ApiLineNotifySendMessagetoSelfPost$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiLineNotifySendMessagetoSelfPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiLineNotifySendMessagetoAllPost
-   */
+  /** Path part for operation `apiLineNotifySendMessagetoAllPost()` */
   static readonly ApiLineNotifySendMessagetoAllPostPath = '/api/LineNotify/SendMessagetoAll';
 
   /**
@@ -408,38 +260,19 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifySendMessagetoAllPost$Plain$Response(params?: {
-    message?: string;
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifySendMessagetoAllPostPath, 'post');
-    if (params) {
-      rb.query('message', params.message, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiLineNotifySendMessagetoAllPost$Plain$Response(params?: ApiLineNotifySendMessagetoAllPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiLineNotifySendMessagetoAllPost$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifySendMessagetoAllPost$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifySendMessagetoAllPost$Plain(params?: {
-    message?: string;
-  }): Observable<boolean> {
-
-    return this.apiLineNotifySendMessagetoAllPost$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiLineNotifySendMessagetoAllPost$Plain(params?: ApiLineNotifySendMessagetoAllPost$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiLineNotifySendMessagetoAllPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
@@ -449,38 +282,19 @@ export class LineNotifyService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifySendMessagetoAllPost$Json$Response(params?: {
-    message?: string;
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, LineNotifyService.ApiLineNotifySendMessagetoAllPostPath, 'post');
-    if (params) {
-      rb.query('message', params.message, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiLineNotifySendMessagetoAllPost$Json$Response(params?: ApiLineNotifySendMessagetoAllPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiLineNotifySendMessagetoAllPost$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiLineNotifySendMessagetoAllPost$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineNotifySendMessagetoAllPost$Json(params?: {
-    message?: string;
-  }): Observable<boolean> {
-
-    return this.apiLineNotifySendMessagetoAllPost$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiLineNotifySendMessagetoAllPost$Json(params?: ApiLineNotifySendMessagetoAllPost$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiLineNotifySendMessagetoAllPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

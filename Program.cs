@@ -68,11 +68,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JwtSettings:SignKey")))
         };
     });
-
-// builder.Services.AddSingleton(
-//     InitializeAccountClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
-// builder.Services.AddSingleton(
-//     InitializeMessageLogClientInstanceAsync(builder.Configuration.GetSection("CosmosDb")).GetAwaiter().GetResult());
 builder.Services.AddSingleton<TokenService>();
 builder.Services.AddSingleton<AutoMapperService>();
 builder.Services.AddScoped<CosmosDBService>();
@@ -107,32 +102,3 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html"); ;
 
 app.Run();
-
-
-// static async Task<AccountService> InitializeAccountClientInstanceAsync(IConfigurationSection configurationSection)
-// {
-//     string databaseName = configurationSection.GetSection("DatabaseName").Value;
-//     string containerName = "account";
-//     string account = Environment.GetEnvironmentVariable("COSMOS_ENDPOINT") ?? "";
-//     string key = Environment.GetEnvironmentVariable("COSMOS_KEY") ?? "";
-//     Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
-//     AccountService accountHelper = new AccountService(client, databaseName, containerName);
-//     Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-//     await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
-
-//     return accountHelper;
-// }
-
-// static async Task<MessageLogService> InitializeMessageLogClientInstanceAsync(IConfigurationSection configurationSection)
-// {
-//     string databaseName = configurationSection.GetSection("DatabaseName").Value;
-//     string containerName = "messageLog";
-//     string account = Environment.GetEnvironmentVariable("COSMOS_ENDPOINT") ?? "";
-//     string key = Environment.GetEnvironmentVariable("COSMOS_KEY") ?? "";
-//     Microsoft.Azure.Cosmos.CosmosClient client = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
-//     MessageLogService messageLogService = new MessageLogService(client, databaseName, containerName);
-//     Microsoft.Azure.Cosmos.DatabaseResponse database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-//     await database.Database.CreateContainerIfNotExistsAsync(containerName, "/id");
-
-//     return messageLogService;
-// }

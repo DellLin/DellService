@@ -5,8 +5,8 @@ public class LineNotifyService
     private readonly IConfiguration _configuration;
     private readonly AccountService _accountService;
 
-    private readonly string _clientId = Environment.GetEnvironmentVariable("LINE_NOTIFY_CLIENT_ID") ?? "";
-    private readonly string _clientSeret = Environment.GetEnvironmentVariable("LINE_NOTIFY_CLIENT_SERET") ?? "";
+    private readonly string _clientId;
+    private readonly string _clientSeret;
 
     public LineNotifyService(
         ILogger<LineNotifyService> logger,
@@ -19,6 +19,8 @@ public class LineNotifyService
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
         _accountService = accountService;
+        _clientId = _configuration.GetSection("LINE_NOTIFY_CLIENT_ID").Value;
+        _clientSeret = _configuration.GetSection("LINE_NOTIFY_CLIENT_SERET").Value;
     }
     /// <summary>
     /// 拿 Code 換 Token

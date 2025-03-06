@@ -1,29 +1,28 @@
 /* tslint:disable */
 /* eslint-disable */
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
-import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
 
+import { apiGoogleAuthCallBackGet } from '../fn/google-auth/api-google-auth-call-back-get';
+import { ApiGoogleAuthCallBackGet$Params } from '../fn/google-auth/api-google-auth-call-back-get';
+import { apiGoogleAuthGet$Json } from '../fn/google-auth/api-google-auth-get-json';
+import { ApiGoogleAuthGet$Json$Params } from '../fn/google-auth/api-google-auth-get-json';
+import { apiGoogleAuthGet$Plain } from '../fn/google-auth/api-google-auth-get-plain';
+import { ApiGoogleAuthGet$Plain$Params } from '../fn/google-auth/api-google-auth-get-plain';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class GoogleAuthService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
-  /**
-   * Path part for operation apiGoogleAuthGet
-   */
+  /** Path part for operation `apiGoogleAuthGet()` */
   static readonly ApiGoogleAuthGetPath = '/api/GoogleAuth';
 
   /**
@@ -32,35 +31,19 @@ export class GoogleAuthService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiGoogleAuthGet$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<string>> {
-
-    const rb = new RequestBuilder(this.rootUrl, GoogleAuthService.ApiGoogleAuthGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<string>;
-      })
-    );
+  apiGoogleAuthGet$Plain$Response(params?: ApiGoogleAuthGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return apiGoogleAuthGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiGoogleAuthGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiGoogleAuthGet$Plain(params?: {
-  }): Observable<string> {
-
-    return this.apiGoogleAuthGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
+  apiGoogleAuthGet$Plain(params?: ApiGoogleAuthGet$Plain$Params, context?: HttpContext): Observable<string> {
+    return this.apiGoogleAuthGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
@@ -70,41 +53,23 @@ export class GoogleAuthService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiGoogleAuthGet$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<string>> {
-
-    const rb = new RequestBuilder(this.rootUrl, GoogleAuthService.ApiGoogleAuthGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<string>;
-      })
-    );
+  apiGoogleAuthGet$Json$Response(params?: ApiGoogleAuthGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return apiGoogleAuthGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiGoogleAuthGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiGoogleAuthGet$Json(params?: {
-  }): Observable<string> {
-
-    return this.apiGoogleAuthGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<string>) => r.body as string)
+  apiGoogleAuthGet$Json(params?: ApiGoogleAuthGet$Json$Params, context?: HttpContext): Observable<string> {
+    return this.apiGoogleAuthGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiGoogleAuthCallBackGet
-   */
+  /** Path part for operation `apiGoogleAuthCallBackGet()` */
   static readonly ApiGoogleAuthCallBackGetPath = '/api/GoogleAuth/CallBack';
 
   /**
@@ -113,41 +78,19 @@ export class GoogleAuthService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiGoogleAuthCallBackGet$Response(params?: {
-    code?: string;
-    error?: string;
-  }): Observable<StrictHttpResponse<void>> {
-
-    const rb = new RequestBuilder(this.rootUrl, GoogleAuthService.ApiGoogleAuthCallBackGetPath, 'get');
-    if (params) {
-      rb.query('code', params.code, {});
-      rb.query('error', params.error, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: '*/*'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
-      })
-    );
+  apiGoogleAuthCallBackGet$Response(params?: ApiGoogleAuthCallBackGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return apiGoogleAuthCallBackGet(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiGoogleAuthCallBackGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiGoogleAuthCallBackGet(params?: {
-    code?: string;
-    error?: string;
-  }): Observable<void> {
-
-    return this.apiGoogleAuthCallBackGet$Response(params).pipe(
-      map((r: StrictHttpResponse<void>) => r.body as void)
+  apiGoogleAuthCallBackGet(params?: ApiGoogleAuthCallBackGet$Params, context?: HttpContext): Observable<void> {
+    return this.apiGoogleAuthCallBackGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

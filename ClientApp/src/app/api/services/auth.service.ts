@@ -1,29 +1,30 @@
 /* tslint:disable */
 /* eslint-disable */
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
-import { RequestBuilder } from '../request-builder';
-import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
 
+import { apiAuthCheckLoginGet$Json } from '../fn/auth/api-auth-check-login-get-json';
+import { ApiAuthCheckLoginGet$Json$Params } from '../fn/auth/api-auth-check-login-get-json';
+import { apiAuthCheckLoginGet$Plain } from '../fn/auth/api-auth-check-login-get-plain';
+import { ApiAuthCheckLoginGet$Plain$Params } from '../fn/auth/api-auth-check-login-get-plain';
+import { apiAuthRefreshTokenPost$Json } from '../fn/auth/api-auth-refresh-token-post-json';
+import { ApiAuthRefreshTokenPost$Json$Params } from '../fn/auth/api-auth-refresh-token-post-json';
+import { apiAuthRefreshTokenPost$Plain } from '../fn/auth/api-auth-refresh-token-post-plain';
+import { ApiAuthRefreshTokenPost$Plain$Params } from '../fn/auth/api-auth-refresh-token-post-plain';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService extends BaseService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
+  constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
-  /**
-   * Path part for operation apiAuthCheckLoginGet
-   */
+  /** Path part for operation `apiAuthCheckLoginGet()` */
   static readonly ApiAuthCheckLoginGetPath = '/api/Auth/CheckLogin';
 
   /**
@@ -32,35 +33,19 @@ export class AuthService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiAuthCheckLoginGet$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AuthService.ApiAuthCheckLoginGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiAuthCheckLoginGet$Plain$Response(params?: ApiAuthCheckLoginGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiAuthCheckLoginGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiAuthCheckLoginGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiAuthCheckLoginGet$Plain(params?: {
-  }): Observable<boolean> {
-
-    return this.apiAuthCheckLoginGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiAuthCheckLoginGet$Plain(params?: ApiAuthCheckLoginGet$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiAuthCheckLoginGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
@@ -70,41 +55,23 @@ export class AuthService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiAuthCheckLoginGet$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AuthService.ApiAuthCheckLoginGetPath, 'get');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiAuthCheckLoginGet$Json$Response(params?: ApiAuthCheckLoginGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiAuthCheckLoginGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiAuthCheckLoginGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiAuthCheckLoginGet$Json(params?: {
-  }): Observable<boolean> {
-
-    return this.apiAuthCheckLoginGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiAuthCheckLoginGet$Json(params?: ApiAuthCheckLoginGet$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiAuthCheckLoginGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
-  /**
-   * Path part for operation apiAuthRefreshTokenPost
-   */
+  /** Path part for operation `apiAuthRefreshTokenPost()` */
   static readonly ApiAuthRefreshTokenPostPath = '/api/Auth/RefreshToken';
 
   /**
@@ -113,35 +80,19 @@ export class AuthService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiAuthRefreshTokenPost$Plain$Response(params?: {
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AuthService.ApiAuthRefreshTokenPostPath, 'post');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'text',
-      accept: 'text/plain'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiAuthRefreshTokenPost$Plain$Response(params?: ApiAuthRefreshTokenPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiAuthRefreshTokenPost$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiAuthRefreshTokenPost$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiAuthRefreshTokenPost$Plain(params?: {
-  }): Observable<boolean> {
-
-    return this.apiAuthRefreshTokenPost$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiAuthRefreshTokenPost$Plain(params?: ApiAuthRefreshTokenPost$Plain$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiAuthRefreshTokenPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
@@ -151,35 +102,19 @@ export class AuthService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiAuthRefreshTokenPost$Json$Response(params?: {
-  }): Observable<StrictHttpResponse<boolean>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AuthService.ApiAuthRefreshTokenPostPath, 'post');
-    if (params) {
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'text/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
-      })
-    );
+  apiAuthRefreshTokenPost$Json$Response(params?: ApiAuthRefreshTokenPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return apiAuthRefreshTokenPost$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `apiAuthRefreshTokenPost$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiAuthRefreshTokenPost$Json(params?: {
-  }): Observable<boolean> {
-
-    return this.apiAuthRefreshTokenPost$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<boolean>) => r.body as boolean)
+  apiAuthRefreshTokenPost$Json(params?: ApiAuthRefreshTokenPost$Json$Params, context?: HttpContext): Observable<boolean> {
+    return this.apiAuthRefreshTokenPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

@@ -29,7 +29,7 @@ public class GoogleAuthService
     {
         try
         {
-            var clientId = Environment.GetEnvironmentVariable("GOOGLE_AUTH_CLIENT_ID");
+            var clientId = _configuration.GetSection("GOOGLE_AUTH_CLIENT_ID").Value;
             var clientSeret = _configuration.GetSection("GOOGLE_AUTH_CLIENT_SERET").Value;
             if (clientId == null || clientSeret == null)
                 throw new Exception("Environment Variable [CLIENT_ID] is null");

@@ -8,8 +8,8 @@ public class LineLoginService
     private readonly AccountService _accountService;
     private readonly TokenService _tokenService;
     private readonly IConfiguration _configuration;
-    private readonly string _clientId = Environment.GetEnvironmentVariable("LINE_CLIENT_ID") ?? "";
-    private readonly string _clientSeret = Environment.GetEnvironmentVariable("LINE_CLIENT_SERET") ?? "";
+    private readonly string _clientId;
+    private readonly string _clientSeret;
 
     public LineLoginService(
         ILogger<LineLoginService> logger,
@@ -26,6 +26,8 @@ public class LineLoginService
         _accountService = accountService;
         _tokenService = tokenService;
         _configuration = configuration;
+        _clientId = _configuration.GetValue<string>("LINE_CLIENT_ID");
+        _clientSeret = _configuration.GetValue<string>("LINE_CLIENT_SERET");
     }
     /// <summary>
     /// 拿 Code 換 Token

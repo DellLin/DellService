@@ -32,10 +32,10 @@ public class LineLoginController : ControllerBase
         try
         {
             var responeType = "code";
-            var client_id = Environment.GetEnvironmentVariable("LINE_CLIENT_ID");
+            var client_id = _configuration.GetSection("LINE_CLIENT_ID").Value;
             var state = "123123";
             var scope = "openid email profile";
-            var redirect_uri = $"{Request.Scheme}://{Request.Host.Value.Replace("localhost", "127.0.0.1")}/{_configuration.GetValue<string>("LineLoginCallBackPath")}";
+            var redirect_uri = $"{Request.Scheme}://{Request.Host.Value}/{_configuration.GetValue<string>("LineLoginCallBackPath")}";
             System.Console.WriteLine(redirect_uri);
             var redirect = new Uri($@"https://access.line.me/oauth2/v2.1/authorize?response_type={responeType}&client_id={client_id}&state={state}&scope={scope}&redirect_uri={redirect_uri}");
             System.Console.WriteLine(redirect.ToString());
@@ -54,7 +54,7 @@ public class LineLoginController : ControllerBase
         {
             string successRedirectPath = "/main/line/line-notify";
             string errorRedirectPath = "/login";
-            var redirectUri = new Uri(_webHostEnvironment.IsDevelopment() ? "https://127.0.0.1:44488" : $"{Request.Scheme}://{Request.Host}");
+            var redirectUri = new Uri(_webHostEnvironment.IsDevelopment() ? "https://localhost:44488" : $"{Request.Scheme}://{Request.Host}");
             if (await _lineLoginService.GetAccessToken(code, Request, Response))
             {
                 redirectUri = new Uri(redirectUri, successRedirectPath);

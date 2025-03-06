@@ -32,10 +32,10 @@ public class LineNotifyController : ControllerBase
         try
         {
             var responeType = "code";
-            var client_id = Environment.GetEnvironmentVariable("LINE_NOTIFY_CLIENT_ID");
+            var client_id = _configuration.GetSection("LINE_NOTIFY_CLIENT_ID").Value;
             var state = "123123";
             var scope = "notify";
-            var redirect_uri = $"{Request.Scheme}://{Request.Host.Value.Replace("localhost", "127.0.0.1")}/{_configuration.GetValue<string>("LineNotifyCallBackPath")}";
+            var redirect_uri = $"{Request.Scheme}://{Request.Host.Value}/{_configuration.GetValue<string>("LineNotifyCallBackPath")}";
             System.Console.WriteLine(redirect_uri);
             var redirect = new Uri($@"https://notify-bot.line.me/oauth/authorize?response_type={responeType}&client_id={client_id}&state={state}&scope={scope}&redirect_uri={redirect_uri}");
             System.Console.WriteLine(redirect.ToString());
@@ -55,7 +55,7 @@ public class LineNotifyController : ControllerBase
         {
             string successRedirectPath = "/line/line-notify";
             string errorRedirectPath = "/line/line-notify";
-            var redirectUri = new Uri(_webHostEnvironment.IsDevelopment() ? "https://127.0.0.1:44488" : $"{Request.Scheme}://{Request.Host}");
+            var redirectUri = new Uri(_webHostEnvironment.IsDevelopment() ? "https://localhost:44488" : $"{Request.Scheme}://{Request.Host}");
             if (await _lineNotifyService.GetAccessToken(code, Request))
             {
                 redirectUri = new Uri(redirectUri, successRedirectPath);

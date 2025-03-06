@@ -12,8 +12,8 @@ public class CosmosDBService
     {
         _configuration = configuration;
         string databaseName = _configuration.GetSection("CosmosDb:DatabaseName").Value;
-        string account = Environment.GetEnvironmentVariable("COSMOS_ENDPOINT") ?? "";
-        string key = Environment.GetEnvironmentVariable("COSMOS_KEY") ?? "";
+        string account = _configuration.GetSection("COSMOS_ENDPOINT").Value ?? "";
+        string key = _configuration.GetSection("COSMOS_KEY").Value ?? "";
         this._cosmosClient = new Microsoft.Azure.Cosmos.CosmosClient(account, key);
         this._accountContainer = _cosmosClient.GetContainer(databaseName, "account");
         this._messageLogContainer = _cosmosClient.GetContainer(databaseName, "messageLog");
