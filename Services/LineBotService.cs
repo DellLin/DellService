@@ -18,8 +18,8 @@ namespace DellService.Services
 
         public async Task<string> GetAccessTokenAsync()
         {
-            var clientId = _configuration.GetSection("CLIENT_ID").Value;
-            var clientSecret = _configuration.GetSection("CLIENT_SECRET").Value;
+            var clientId = _configuration.GetSection("LINE_BOT_CLIENT_ID").Value;
+            var clientSecret = _configuration.GetSection("LINE_BOT_CLIENT_SECRET").Value;
             Console.WriteLine($"client_id: {clientId}");
             Console.WriteLine($"client_secret: {clientSecret}");
 
