@@ -18,14 +18,14 @@ namespace DellService.Services
 
         public async Task<string> GetAccessTokenAsync()
         {
-            var clientId = _configuration["CLIENT_ID"];
-            var clientSecret = _configuration["CLIENT_SECRET"];
+            var clientId = _configuration.GetSection("CLIENT_ID").Value;
+            var clientSecret = _configuration.GetSection("CLIENT_SECRET").Value;
             Console.WriteLine($"client_id: {clientId}");
             Console.WriteLine($"client_secret: {clientSecret}");
 
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+                // client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 
                 var data = new FormUrlEncodedContent(new[]
                 {
@@ -35,7 +35,6 @@ namespace DellService.Services
                 });
 
                 var response = await client.PostAsync("https://api.line.me/oauth2/v3/token", data);
-                response.EnsureSuccessStatusCode();
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var json = JObject.Parse(responseContent);

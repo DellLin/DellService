@@ -16,22 +16,46 @@ namespace DellService.Controllers
             _lineBotService = lineBotService;
             _accountService = accountService;
         }
+
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] JObject value)
+        public async Task<IActionResult> Post(LineBotEvent lineBotEvent)
         {
             // 解析 JSON 格式的 request body
-            Console.WriteLine("Request Body: " + value.ToString());
+            Console.WriteLine("Request Body: " + lineBotEvent.ToString());
 
-            var userId = value["events"]?[0]?["source"]?["userId"]?.ToString();
-            Console.WriteLine("User id: " + userId);
-            var account = await _accountService.GetAccount(User.Identity?.Name ?? "");
-            if (account.LineBotUserId == null)
+            foreach (var evt in lineBotEvent.Events)
             {
-                account.LineBotUserId = userId;
-                await _accountService.UpdateAccount(account);
+                if (evt.ReplyToken == null)
+                {
+                    continue;
+                }
+                if (evt.Type == "flow")
+                {
+                    var newAccount = new Account()
+                    {
+                        LineBotUserId = evt.Source.UserId,
+                    };
+                    await _accountService.AddAccount(newAccount);
+                }
+                if (evt.Type == "message")
+                {
+                    var userId = evt.Source.UserId;
+                    Console.WriteLine("User id: " + userId);
+                    var account = await _accountService.GetAccountByLineBotUserId(userId);
+                    if (account == null)
+                    {
+                        var newAccount = new Account()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            LineBotUserId = userId,
+                        };
+                        await _accountService.AddAccount(newAccount);
+                    }
+                    var accessToken = await _lineBotService.GetAccessTokenAsync();
+                    await _lineBotService.ReplyMessageAsync(evt.ReplyToken.ToString()!, accessToken, userId!);
+                }
             }
-            var accessToken = await _lineBotService.GetAccessTokenAsync();
-            await _lineBotService.ReplyMessageAsync(value["events"]?[0]?["replyToken"]?.ToString()!, accessToken, userId!);
+
             // Handle the POST request here
             return Ok();
         }

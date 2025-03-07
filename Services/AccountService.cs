@@ -136,6 +136,32 @@ public class AccountService
             throw;
         }
     }
+    public async Task<Account?> GetAccountByLineBotUserId(string lineBotUserId)
+    {
+        try
+        {
+            var query = new QueryDefinition(
+                query: "SELECT * FROM account p WHERE p.lineBotUserId = @key"
+            )
+        .WithParameter("@key", lineBotUserId);
+
+            using FeedIterator<Account> feed = _cosmosDBService.AccountContainer.GetItemQueryIterator<Account>(
+                queryDefinition: query
+            );
+
+            while (feed.HasMoreResults)
+            {
+                FeedResponse<Account> response = await feed.ReadNextAsync();
+                return response.FirstOrDefault();
+            }
+            return null;
+        }
+        catch
+        {
+
+            throw;
+        }
+    }
     public async Task<Account> UpdateAccount(Account account)
     {
         try
