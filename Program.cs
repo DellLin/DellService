@@ -1,4 +1,3 @@
-using DellService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -79,7 +78,7 @@ builder.Services.AddScoped<PttCatchHistoryService>();
 builder.Services.AddScoped<LineLoginService>();
 builder.Services.AddScoped<LineNotifyService>();
 builder.Services.AddScoped<GoogleAuthService>();
-builder.Services.AddScoped<LineBotService>();
+builder.Services.AddHttpClient<LineBotService>();
 var app = builder.Build();
 
 app.UseSwagger();

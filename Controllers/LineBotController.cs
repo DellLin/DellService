@@ -1,4 +1,3 @@
-using DellService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -49,10 +48,10 @@ namespace DellService.Controllers
                             Id = Guid.NewGuid().ToString(),
                             LineBotUserId = userId,
                         };
-                        await _accountService.AddAccount(newAccount);
+                        account = await _accountService.AddAccount(newAccount);
                     }
                     var accessToken = await _lineBotService.GetAccessTokenAsync();
-                    await _lineBotService.ReplyMessageAsync(evt.ReplyToken.ToString()!, accessToken, userId!);
+                    await _lineBotService.PushMessageAsync(account.Id!, new[] { account.Id! }, accessToken);
                 }
             }
 
