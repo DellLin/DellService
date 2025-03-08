@@ -1,4 +1,3 @@
-
 public class LineBotService
 {
     private readonly IConfiguration _configuration;
@@ -73,7 +72,7 @@ public class LineBotService
 
     }
 
-    public async Task<JObject> PushMessageAsync(string to, string[] messages, string accessToken)
+    public async Task<JObject> PushMessageAsync(string to, LineMessage messages, string accessToken)
     {
         var url = "https://api.line.me/v2/bot/message/push";
         var retryKey = Guid.NewGuid().ToString();
@@ -87,12 +86,7 @@ public class LineBotService
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 request.Headers.Add("X-Line-Retry-Key", retryKey);
 
-                var data = new
-                {
-                    to = to,
-                    messages = messages.Select(message => new { type = "text", text = message }).ToArray()
-                };
-                request.Content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
+                request.Content = new StringContent(JsonConvert.SerializeObject(messages), System.Text.Encoding.UTF8, "application/json");
                 var httpClient = _httpClientFactory.CreateClient("LineBot");
                 var response = await httpClient.SendAsync(request);
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -107,5 +101,21 @@ public class LineBotService
             }
         }
         throw new Exception("Failed to push message after 3 attempts.");
+    }
+
+    public async Task<string> GenerateLinkTokenAsync(string userId, string accessToken)
+    {
+        var url = $"https://api.line.me/v2/bot/user/{userId}/linkToken";
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await client.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var json = JObject.Parse(responseContent);
+            return json["linkToken"]!.ToString();
+        }
     }
 }

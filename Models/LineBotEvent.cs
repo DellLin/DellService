@@ -5,57 +5,57 @@ using Newtonsoft.Json;
 public class LineBotEvent
 {
     [JsonProperty("destination")]
-    public string Destination { get; set; }
+    public string Destination { get; set; } = null!;
 
     [JsonProperty("events")]
-    public List<Event> Events { get; set; }
+    public List<Event> Events { get; set; } = null!;
 
     public class Event
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; set; } = null!;
 
         [JsonProperty("message")]
-        public Message? Message { get; set; }
+        public Message Message { get; set; } = null!;
 
         [JsonProperty("timestamp")]
         public long Timestamp { get; set; }
 
         [JsonProperty("source")]
-        public Source Source { get; set; }
+        public Source Source { get; set; } = null!;
 
         [JsonProperty("replyToken")]
-        public string? ReplyToken { get; set; }
+        public string ReplyToken { get; set; } = null!;
 
         [JsonProperty("mode")]
-        public string Mode { get; set; }
+        public string Mode { get; set; } = null!;
 
         [JsonProperty("webhookEventId")]
-        public string WebhookEventId { get; set; }
+        public string WebhookEventId { get; set; } = null!;
 
         [JsonProperty("deliveryContext")]
-        public DeliveryContext DeliveryContext { get; set; }
+        public DeliveryContext DeliveryContext { get; set; } = null!;
     }
 
     public class Message
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; set; } = null!;
 
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
 
         [JsonProperty("text")]
-        public string Text { get; set; }
+        public string Text { get; set; } = null!;
     }
 
     public class Source
     {
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; set; } = null!;
 
         [JsonProperty("userId")]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = null!;
     }
 
     public class DeliveryContext
