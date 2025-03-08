@@ -54,11 +54,9 @@ namespace DellService.Controllers
                         account = await _accountService.AddAccount(newAccount);
                     }
                     var accessToken = await _lineBotService.GetAccessTokenAsync();
-                    await _lineBotService.PushMessageAsync(account.Id!, new[] { account.Id! }, accessToken);
+                    await _lineBotService.PushMessageAsync(account.Id!, new[] { account.LineBotUserId! }, accessToken);
                 }
             }
-
-            // Handle the POST request here
             return Ok();
         }
     }

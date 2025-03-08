@@ -2,13 +2,15 @@
 public class LineBotService
 {
     private readonly IConfiguration _configuration;
-    private readonly HttpClient _httpClient;
-
-    public LineBotService(IConfiguration configuration, HttpClient httpClient)
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<LineBotService> _logger;
+    public LineBotService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<LineBotService> logger)
     {
         _configuration = configuration;
-        _httpClient = httpClient;
+        _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
+
 
     public async Task<string> GetAccessTokenAsync()
     {
@@ -21,8 +23,8 @@ public class LineBotService
                     new KeyValuePair<string, string>("client_id", clientId),
                     new KeyValuePair<string, string>("client_secret", clientSecret)
                 });
-
-        var response = await this._httpClient.PostAsync("https://api.line.me/oauth2/v3/token", data);
+        var httpClient = _httpClientFactory.CreateClient("LineBot");
+        var response = await httpClient.PostAsync("https://api.line.me/oauth2/v3/token", data);
 
         var responseContent = await response.Content.ReadAsStringAsync();
         var json = JObject.Parse(responseContent);
@@ -33,30 +35,42 @@ public class LineBotService
     public async Task<JObject> ReplyMessageAsync(string replyToken, string accessToken, string message)
     {
         var url = "https://api.line.me/v2/bot/message/reply";
+
+        using (var request = new HttpRequestMessage(HttpMethod.Post, url))
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var data = new
             {
                 replyToken = replyToken,
                 messages = new[]
                 {
-                        new
-                        {
-                            type = "text",
-                            text = message
-                        }
+                    new
+                    {
+                        type = "text",
+                        text = message
                     }
+                }
             };
 
-            var content = new StringContent(JObject.FromObject(data).ToString(), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(url, content);
-            response.EnsureSuccessStatusCode();
+            request.Content = new StringContent(JObject.FromObject(data).ToString(), System.Text.Encoding.UTF8, "application/json");
+            var httpClient = _httpClientFactory.CreateClient("LineBot");
 
+            var response = await httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JObject.Parse(responseContent);
+            }
+            else
+            {
+                _logger.LogError("Failed to reply message: {0}", responseContent);
+            }
             return JObject.Parse(responseContent);
-
         }
+
+
     }
 
     public async Task<JObject> PushMessageAsync(string to, string[] messages, string accessToken)
@@ -67,25 +81,30 @@ public class LineBotService
 
         for (int i = 0; i < 3; i++)
         {
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            _httpClient.DefaultRequestHeaders.Add("X-Line-Retry-Key", retryKey);
-
-            var data = new
+            using (var request = new HttpRequestMessage(HttpMethod.Post, url))
             {
-                to = to,
-                messages = messages.Select(message => new { type = "text", text = message }).ToArray()
-            };
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                request.Headers.Add("X-Line-Retry-Key", retryKey);
 
-            var content = new StringContent(JObject.FromObject(data).ToString(), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
-            {
+                var data = new
+                {
+                    to = to,
+                    messages = messages.Select(message => new { type = "text", text = message }).ToArray()
+                };
+                request.Content = new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json");
+                var httpClient = _httpClientFactory.CreateClient("LineBot");
+                var response = await httpClient.SendAsync(request);
                 var responseContent = await response.Content.ReadAsStringAsync();
-                return JObject.Parse(responseContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    return JObject.Parse(responseContent);
+                }
+                {
+                    _logger.LogError("Failed to push message: {0}", responseContent);
+                }
+                await Task.Delay(random.Next(0, 200));
             }
-            await Task.Delay(random.Next(0, 200));
         }
         throw new Exception("Failed to push message after 3 attempts.");
     }
