@@ -15,8 +15,8 @@ public class LineBotEvent
         [JsonProperty("type")]
         public string Type { get; set; } = null!;
 
-        [JsonProperty("message")]
-        public Message Message { get; set; } = null!;
+        [JsonProperty("mode")]
+        public string Mode { get; set; } = null!;
 
         [JsonProperty("timestamp")]
         public long Timestamp { get; set; }
@@ -24,19 +24,20 @@ public class LineBotEvent
         [JsonProperty("source")]
         public Source Source { get; set; } = null!;
 
-        [JsonProperty("replyToken")]
-        public string ReplyToken { get; set; } = null!;
-
-        [JsonProperty("mode")]
-        public string Mode { get; set; } = null!;
-
         [JsonProperty("webhookEventId")]
         public string WebhookEventId { get; set; } = null!;
 
+        [JsonProperty("message")]
+        public Message Message { get; set; } = null!;
+
         [JsonProperty("deliveryContext")]
         public DeliveryContext DeliveryContext { get; set; } = null!;
+
+        [JsonProperty("replyToken")]
+        public string? ReplyToken { get; set; }
+
         [JsonProperty("link")]
-        public Link Link { get; set; } = null!;
+        public Link? Link { get; set; }
     }
 
     public class Message
