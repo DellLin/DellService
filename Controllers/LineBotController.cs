@@ -92,7 +92,7 @@ public class LineBotController : ControllerBase
                                             {
                                                 Type = "uri",
                                                 Label = "註冊",
-                                                Uri = $"{Request.Scheme}://{Request.Host.Value}/api/LineBot/Link?linkToken={linkToken}",
+                                                Uri = $"{Request.Scheme}://{Request.Host.Value}/api/LineLogin/LineLogin?linkToken={linkToken}",
                                             }
                                         }
 
@@ -119,6 +119,10 @@ public class LineBotController : ControllerBase
                     };
                     await _lineBotService.PushMessageAsync(account.LineBotUserId!, message, accessToken);
                 }
+            }
+            else if (evt.Type == "accountLink")
+            {
+
             }
         }
         return Ok();

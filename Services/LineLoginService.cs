@@ -36,7 +36,7 @@ public class LineLoginService
     /// <param name="Request">HttpRequest</param>
     /// <param name="Response">Response</param>
     /// <returns></returns>
-    public async Task<bool> GetAccessToken(string code, HttpRequest Request, HttpResponse Response)
+    public async Task<bool> GetAccessToken(string code, string nonce, HttpRequest Request, HttpResponse Response)
     {
         try
         {
@@ -79,6 +79,7 @@ public class LineLoginService
                         LineLoginAccessToken = lineAuth?.AccessToken,
                         LineLoginRefreshToken = lineAuth?.RefreshToken,
                         RefreshToken = refreshToken,
+                        Nooce = nonce
                     };
                     await _accountService.AddAccount(account);
                 }
@@ -91,6 +92,7 @@ public class LineLoginService
                     account.LineLoginAccessToken = lineAuth?.AccessToken;
                     account.LineLoginRefreshToken = lineAuth?.RefreshToken;
                     account.RefreshToken = refreshToken;
+                    account.Nooce = nonce;
                     await _accountService.UpdateAccount(account);
                 }
                 var accessToken = _tokenService.GenerateToken(account);

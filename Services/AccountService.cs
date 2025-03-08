@@ -186,9 +186,8 @@ public class AccountService
                 PatchOperation.Set("/lineLoginAccessToken", account.LineLoginAccessToken),
                 PatchOperation.Set("/lineLoginRefreshToken", account.LineLoginRefreshToken),
                 PatchOperation.Set("/linePicture", account.LinePicture),
-
                 PatchOperation.Set("/lineNotifyAccessToken", account.LineNotifyAccessToken),
-
+                PatchOperation.Set("/nooce", account.Nooce),
                 }
             );
             response = await _cosmosDBService.AccountContainer.PatchItemAsync<Account>(

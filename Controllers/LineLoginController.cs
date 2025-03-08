@@ -27,7 +27,7 @@ public class LineLoginController : ControllerBase
         _autoMapperService = autoMapperService;
     }
     [HttpGet("LineLogin")]
-    public string LineLogin()
+    public IActionResult LineLogin([FromQuery] string? linkToken)
     {
         try
         {
@@ -36,10 +36,14 @@ public class LineLoginController : ControllerBase
             var state = "123123";
             var scope = "openid email profile";
             var redirect_uri = $"{Request.Scheme}://{Request.Host.Value}/{_configuration.GetValue<string>("LineLoginCallBackPath")}";
+            if (!string.IsNullOrEmpty(linkToken))
+            {
+                Response.Cookies.Append("linkToken", linkToken);
+            }
             System.Console.WriteLine(redirect_uri);
             var redirect = new Uri($@"https://access.line.me/oauth2/v2.1/authorize?response_type={responeType}&client_id={client_id}&state={state}&scope={scope}&redirect_uri={redirect_uri}");
             System.Console.WriteLine(redirect.ToString());
-            return redirect.ToString();
+            return Redirect(redirect.ToString());
         }
         catch
         {
@@ -52,10 +56,12 @@ public class LineLoginController : ControllerBase
     {
         try
         {
-            string successRedirectPath = "/main/line/line-notify";
+            var linkToken = Request.Cookies["linkToken"];
+            var nonce = Guid.NewGuid().ToString();
+            string successRedirectPath = !string.IsNullOrEmpty(linkToken) ? $"https://access.line.me/dialog/bot/accountLink?linkToken={linkToken}&nonce={nonce}" : "/main/line/line-notify";
             string errorRedirectPath = "/login";
             var redirectUri = new Uri(_webHostEnvironment.IsDevelopment() ? "https://localhost:44488" : $"{Request.Scheme}://{Request.Host}");
-            if (await _lineLoginService.GetAccessToken(code, Request, Response))
+            if (await _lineLoginService.GetAccessToken(code, nonce, Request, Response))
             {
                 redirectUri = new Uri(redirectUri, successRedirectPath);
             }
