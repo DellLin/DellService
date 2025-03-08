@@ -35,6 +35,8 @@ public class LineBotEvent
 
         [JsonProperty("deliveryContext")]
         public DeliveryContext DeliveryContext { get; set; } = null!;
+        [JsonProperty("link")]
+        public Link Link { get; set; } = null!;
     }
 
     public class Message
@@ -62,5 +64,12 @@ public class LineBotEvent
     {
         [JsonProperty("isRedelivery")]
         public bool IsRedelivery { get; set; }
+    }
+    public class Link
+    {
+        [JsonProperty("result")]
+        public string Result { get; set; } = null!;
+        [JsonProperty("nonce")]
+        public string Nonce { get; set; } = null!;
     }
 }

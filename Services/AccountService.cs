@@ -162,6 +162,31 @@ public class AccountService
             throw;
         }
     }
+    public async Task<Account?> GetAccountByNonce(string nonce)
+    {
+        try
+        {
+            var query = new QueryDefinition(
+                query: "SELECT * FROM account p WHERE p.nooce = @key"
+            )
+            .WithParameter("@key", nonce);
+
+            using FeedIterator<Account> feed = _cosmosDBService.AccountContainer.GetItemQueryIterator<Account>(
+                queryDefinition: query
+            );
+
+            while (feed.HasMoreResults)
+            {
+                FeedResponse<Account> response = await feed.ReadNextAsync();
+                return response.FirstOrDefault();
+            }
+            return null;
+        }
+        catch
+        {
+            throw;
+        }
+    }
     public async Task<Account> UpdateAccount(Account account)
     {
         try
@@ -187,6 +212,7 @@ public class AccountService
                 PatchOperation.Set("/lineLoginRefreshToken", account.LineLoginRefreshToken),
                 PatchOperation.Set("/linePicture", account.LinePicture),
                 PatchOperation.Set("/lineNotifyAccessToken", account.LineNotifyAccessToken),
+                PatchOperation.Set("/lineBotUserId", account.LineBotUserId),
                 PatchOperation.Set("/nooce", account.Nooce),
                 }
             );

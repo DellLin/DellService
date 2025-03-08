@@ -122,7 +122,41 @@ public class LineBotController : ControllerBase
             }
             else if (evt.Type == "accountLink")
             {
-
+                var account = await _accountService.GetAccountByNonce(evt.Link.Nonce);
+                if (account != null)
+                {
+                    account.LineBotUserId = evt.Source.UserId;
+                    await _accountService.UpdateAccount(account);
+                    var message = new LineMessage()
+                    {
+                        To = account.LineBotUserId!,
+                        Messages = new List<LineMessage.Message>
+                        {
+                            new LineMessage.Message
+                            {
+                                Type = "text",
+                                Text = new string[] { "註冊成功" }
+                            }
+                        }
+                    };
+                    await _lineBotService.PushMessageAsync(account.LineBotUserId!, message, accessToken);
+                }
+                else
+                {
+                    var message = new LineMessage()
+                    {
+                        To = evt.Source.UserId,
+                        Messages = new List<LineMessage.Message>
+                        {
+                            new LineMessage.Message
+                            {
+                                Type = "text",
+                                Text = new string[] { "註冊失敗" }
+                            }
+                        }
+                    };
+                    await _lineBotService.PushMessageAsync(evt.Source.UserId, message, accessToken);
+                }
             }
         }
         return Ok();
