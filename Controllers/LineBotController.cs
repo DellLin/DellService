@@ -37,7 +37,9 @@ namespace DellService.Controllers
                     {
                         LineBotUserId = evt.Source.UserId,
                     };
-                    await _accountService.AddAccount(newAccount);
+                    var account = await _accountService.AddAccount(newAccount);
+                    var accessToken = await _lineBotService.GetAccessTokenAsync();
+                    await _lineBotService.ReplyMessageAsync(evt.ReplyToken, accessToken, "歡迎使用本服務");
                 }
                 if (evt.Type == "message")
                 {
@@ -54,7 +56,7 @@ namespace DellService.Controllers
                         account = await _accountService.AddAccount(newAccount);
                     }
                     var accessToken = await _lineBotService.GetAccessTokenAsync();
-                    await _lineBotService.PushMessageAsync(account.Id!, new[] { account.LineBotUserId! }, accessToken);
+                    await _lineBotService.PushMessageAsync(account.LineBotUserId!, new[] { account.LineBotUserId! }, accessToken);
                 }
             }
             return Ok();

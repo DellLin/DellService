@@ -78,7 +78,7 @@ builder.Services.AddScoped<PttCatchHistoryService>();
 builder.Services.AddScoped<LineLoginService>();
 builder.Services.AddScoped<LineNotifyService>();
 builder.Services.AddScoped<GoogleAuthService>();
-builder.Services.AddHttpClient<LineBotService>();
+builder.Services.AddScoped<LineBotService>();
 var app = builder.Build();
 
 app.UseSwagger();
