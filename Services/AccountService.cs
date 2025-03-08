@@ -167,7 +167,7 @@ public class AccountService
         try
         {
             var query = new QueryDefinition(
-                query: "SELECT * FROM account p WHERE p.nooce = @key"
+                query: "SELECT * FROM account p WHERE p.nonce = @key"
             )
             .WithParameter("@key", nonce);
 
@@ -213,7 +213,7 @@ public class AccountService
                 PatchOperation.Set("/linePicture", account.LinePicture),
                 PatchOperation.Set("/lineNotifyAccessToken", account.LineNotifyAccessToken),
                 PatchOperation.Set("/lineBotUserId", account.LineBotUserId),
-                PatchOperation.Set("/nooce", account.Nooce),
+                PatchOperation.Set("/nonce", account.Nonce),
                 }
             );
             response = await _cosmosDBService.AccountContainer.PatchItemAsync<Account>(

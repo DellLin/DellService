@@ -79,7 +79,7 @@ public class LineLoginService
                         LineLoginAccessToken = lineAuth?.AccessToken,
                         LineLoginRefreshToken = lineAuth?.RefreshToken,
                         RefreshToken = refreshToken,
-                        Nooce = nonce
+                        Nonce = nonce
                     };
                     await _accountService.AddAccount(account);
                 }
@@ -92,7 +92,7 @@ public class LineLoginService
                     account.LineLoginAccessToken = lineAuth?.AccessToken;
                     account.LineLoginRefreshToken = lineAuth?.RefreshToken;
                     account.RefreshToken = refreshToken;
-                    account.Nooce = nonce;
+                    account.Nonce = nonce;
                     await _accountService.UpdateAccount(account);
                 }
                 var accessToken = _tokenService.GenerateToken(account);

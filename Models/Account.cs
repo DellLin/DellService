@@ -49,7 +49,7 @@ public class Account
     public string? GooglePicture { get; set; }
     [JsonProperty("lineBotUserId")]
     public string? LineBotUserId { get; set; }
-    [JsonProperty("nooce")]
-    public string? Nooce { get; set; }
+    [JsonProperty("nonce")]
+    public string? Nonce { get; set; }
 
 }
