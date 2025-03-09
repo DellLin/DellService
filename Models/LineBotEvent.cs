@@ -27,11 +27,11 @@ public class LineBotEvent
         [JsonProperty("webhookEventId")]
         public string WebhookEventId { get; set; } = null!;
 
-        [JsonProperty("message")]
-        public Message Message { get; set; } = null!;
-
         [JsonProperty("deliveryContext")]
         public DeliveryContext DeliveryContext { get; set; } = null!;
+
+        [JsonProperty("message")]
+        public Message? Message { get; set; }
 
         [JsonProperty("replyToken")]
         public string? ReplyToken { get; set; }

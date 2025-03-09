@@ -19,7 +19,7 @@ public class LineMessage
         public Template Template { get; set; } = null!;
 
         [JsonProperty("text")]
-        public string[] Text { get; set; } = null!;
+        public string Text { get; set; } = null!;
     }
 
     public class Template

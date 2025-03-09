@@ -72,7 +72,7 @@ public class LineBotService
 
     }
 
-    public async Task<JObject> PushMessageAsync(string to, LineMessage messages, string accessToken)
+    public async Task<JObject> PushMessageAsync(LineMessage messages, string accessToken)
     {
         var url = "https://api.line.me/v2/bot/message/push";
         var retryKey = Guid.NewGuid().ToString();
@@ -85,7 +85,6 @@ public class LineBotService
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
                 request.Headers.Add("X-Line-Retry-Key", retryKey);
-
                 request.Content = new StringContent(JsonConvert.SerializeObject(messages), System.Text.Encoding.UTF8, "application/json");
                 var httpClient = _httpClientFactory.CreateClient("LineBot");
                 var response = await httpClient.SendAsync(request);

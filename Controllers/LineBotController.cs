@@ -53,7 +53,7 @@ public class LineBotController : ControllerBase
                     };
                     account = await _accountService.AddAccount(newAccount);
                 }
-                if (evt.Message.Text == "註冊")
+                if (evt.Message?.Text == "註冊")
                 {
                     if (account.LineId != null)
                     {
@@ -65,11 +65,11 @@ public class LineBotController : ControllerBase
                                 new LineMessage.Message
                                 {
                                     Type = "text",
-                                    Text = new string[] { "您已註冊" }
+                                    Text = "您已註冊"
                                 }
                             }
                         };
-                        await _lineBotService.PushMessageAsync(account.LineBotUserId!, alreadLinkMessage, accessToken);
+                        await _lineBotService.PushMessageAsync(alreadLinkMessage, accessToken);
                     }
                     else
                     {
@@ -100,7 +100,7 @@ public class LineBotController : ControllerBase
                                 }
                             }
                         };
-                        await _lineBotService.PushMessageAsync(account.LineBotUserId!, message, accessToken);
+                        await _lineBotService.PushMessageAsync(message, accessToken);
                     }
                 }
                 else
@@ -113,16 +113,16 @@ public class LineBotController : ControllerBase
                             new LineMessage.Message
                             {
                                 Type = "text",
-                                Text = new string[] { accessToken }
+                                Text = evt.Message?.Text ?? ""
                             }
                         }
                     };
-                    await _lineBotService.PushMessageAsync(account.LineBotUserId!, message, accessToken);
+                    await _lineBotService.PushMessageAsync(message, accessToken);
                 }
             }
             else if (evt.Type == "accountLink")
             {
-                var account = await _accountService.GetAccountByNonce(evt.Link.Nonce);
+                var account = await _accountService.GetAccountByNonce(evt.Link!.Nonce);
                 if (account != null)
                 {
                     account.LineBotUserId = evt.Source.UserId;
@@ -135,11 +135,11 @@ public class LineBotController : ControllerBase
                             new LineMessage.Message
                             {
                                 Type = "text",
-                                Text = new string[] { "註冊成功" }
+                                Text = "註冊成功"
                             }
                         }
                     };
-                    await _lineBotService.PushMessageAsync(account.LineBotUserId!, message, accessToken);
+                    await _lineBotService.PushMessageAsync(message, accessToken);
                 }
                 else
                 {
@@ -151,11 +151,11 @@ public class LineBotController : ControllerBase
                             new LineMessage.Message
                             {
                                 Type = "text",
-                                Text = new string[] { "註冊失敗" }
+                                Text = "註冊失敗"
                             }
                         }
                     };
-                    await _lineBotService.PushMessageAsync(evt.Source.UserId, message, accessToken);
+                    await _lineBotService.PushMessageAsync(message, accessToken);
                 }
             }
         }
