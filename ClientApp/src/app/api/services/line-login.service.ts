@@ -12,10 +12,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { AccountViewModel } from '../models/account-view-model';
 import { apiLineLoginLineLoginCallBackGet } from '../fn/line-login/api-line-login-line-login-call-back-get';
 import { ApiLineLoginLineLoginCallBackGet$Params } from '../fn/line-login/api-line-login-line-login-call-back-get';
-import { apiLineLoginLineLoginGet$Json } from '../fn/line-login/api-line-login-line-login-get-json';
-import { ApiLineLoginLineLoginGet$Json$Params } from '../fn/line-login/api-line-login-line-login-get-json';
-import { apiLineLoginLineLoginGet$Plain } from '../fn/line-login/api-line-login-line-login-get-plain';
-import { ApiLineLoginLineLoginGet$Plain$Params } from '../fn/line-login/api-line-login-line-login-get-plain';
+import { apiLineLoginLineLoginGet } from '../fn/line-login/api-line-login-line-login-get';
+import { ApiLineLoginLineLoginGet$Params } from '../fn/line-login/api-line-login-line-login-get';
 import { apiLineLoginSyncLineProfileGet$Json } from '../fn/line-login/api-line-login-sync-line-profile-get-json';
 import { ApiLineLoginSyncLineProfileGet$Json$Params } from '../fn/line-login/api-line-login-sync-line-profile-get-json';
 import { apiLineLoginSyncLineProfileGet$Plain } from '../fn/line-login/api-line-login-sync-line-profile-get-plain';
@@ -32,45 +30,23 @@ export class LineLoginService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiLineLoginLineLoginGet$Plain()` instead.
+   * To access only the response body, use `apiLineLoginLineLoginGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginLineLoginGet$Plain$Response(params?: ApiLineLoginLineLoginGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-    return apiLineLoginLineLoginGet$Plain(this.http, this.rootUrl, params, context);
+  apiLineLoginLineLoginGet$Response(params?: ApiLineLoginLineLoginGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return apiLineLoginLineLoginGet(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiLineLoginLineLoginGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiLineLoginLineLoginGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiLineLoginLineLoginGet$Plain(params?: ApiLineLoginLineLoginGet$Plain$Params, context?: HttpContext): Observable<string> {
-    return this.apiLineLoginLineLoginGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<string>): string => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiLineLoginLineLoginGet$Json()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiLineLoginLineLoginGet$Json$Response(params?: ApiLineLoginLineLoginGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-    return apiLineLoginLineLoginGet$Json(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiLineLoginLineLoginGet$Json$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiLineLoginLineLoginGet$Json(params?: ApiLineLoginLineLoginGet$Json$Params, context?: HttpContext): Observable<string> {
-    return this.apiLineLoginLineLoginGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<string>): string => r.body)
+  apiLineLoginLineLoginGet(params?: ApiLineLoginLineLoginGet$Params, context?: HttpContext): Observable<void> {
+    return this.apiLineLoginLineLoginGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

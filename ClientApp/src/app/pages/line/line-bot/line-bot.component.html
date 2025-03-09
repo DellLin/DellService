@@ -1,0 +1,17 @@
+<div class="grid">
+
+    <div class="col-12">
+
+        <div class="card mb-0">
+            <h5>Line Bot Subscribe</h5>
+            <p-selectButton [options]="stateOptions" [(ngModel)]="lineBotState" [disabled]="true" optionLabel="label"
+                optionValue="value" (onChange)="onLineNotifyStateChange()"></p-selectButton>
+            <img *ngIf="!lineBotState&&!pageloading" src="./assets/562wpvlo.png" alt="">
+            <h5>Send message</h5>
+            <textarea pInputTextarea class="w-full" [(ngModel)]="message"
+                [disabled]="!lineBotState||pageloading"></textarea>
+            <button pButton pRipple label="Send" (click)="onSendMessageClick()"
+                [disabled]="!lineBotState||pageloading"></button>
+        </div>
+    </div>
+</div>

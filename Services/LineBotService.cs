@@ -117,4 +117,27 @@ public class LineBotService
             return json["linkToken"]!.ToString();
         }
     }
+    public async Task<bool> GetState(Account account, string accessToken)
+    {
+        try
+        {
+            var httpClient = _httpClientFactory.CreateClient("LineBot");
+            using var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"https://api.line.me/v2/bot/profile/{account.LineBotUserId}");
+            httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            using var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            // 錯誤
+            else
+            {
+                return false;
+            }
+        }
+        catch
+        {
+            throw;
+        }
+    }
 }

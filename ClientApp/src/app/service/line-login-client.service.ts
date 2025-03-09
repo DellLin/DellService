@@ -12,11 +12,7 @@ export class AuthRedrictService {
     private googleAuthService: GoogleAuthService
   ) { }
   gotoLineLogin() {
-    this.lineLoginService.apiLineLoginLineLoginGet$Json().subscribe({
-      next: (data) => {
-        window.location.href = data;
-      }
-    });
+    window.location.href = '/api/LineLogin/LineLogin';
   }
   gotoGoogleLogin() {
     this.googleAuthService.apiGoogleAuthGet$Json().subscribe({

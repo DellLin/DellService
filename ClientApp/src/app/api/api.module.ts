@@ -7,6 +7,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { AccountService } from './services/account.service';
 import { AuthService } from './services/auth.service';
 import { GoogleAuthService } from './services/google-auth.service';
+import { LineBotService } from './services/line-bot.service';
 import { LineLoginService } from './services/line-login.service';
 import { LineNotifyService } from './services/line-notify.service';
 import { MessageLogService } from './services/message-log.service';
@@ -24,6 +25,7 @@ import { PttSpiderService } from './services/ptt-spider.service';
     AccountService,
     AuthService,
     GoogleAuthService,
+    LineBotService,
     LineLoginService,
     LineNotifyService,
     MessageLogService,

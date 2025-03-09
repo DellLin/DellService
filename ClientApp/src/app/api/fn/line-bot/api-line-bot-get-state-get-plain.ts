@@ -7,11 +7,11 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface ApiLineLoginLineLoginGet$Plain$Params {
+export interface ApiLineBotGetStateGet$Plain$Params {
 }
 
-export function apiLineLoginLineLoginGet$Plain(http: HttpClient, rootUrl: string, params?: ApiLineLoginLineLoginGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-  const rb = new RequestBuilder(rootUrl, apiLineLoginLineLoginGet$Plain.PATH, 'get');
+export function apiLineBotGetStateGet$Plain(http: HttpClient, rootUrl: string, params?: ApiLineBotGetStateGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, apiLineBotGetStateGet$Plain.PATH, 'get');
   if (params) {
   }
 
@@ -20,9 +20,9 @@ export function apiLineLoginLineLoginGet$Plain(http: HttpClient, rootUrl: string
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<string>;
+      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
     })
   );
 }
 
-apiLineLoginLineLoginGet$Plain.PATH = '/api/LineLogin/LineLogin';
+apiLineBotGetStateGet$Plain.PATH = '/api/LineBot/GetState';

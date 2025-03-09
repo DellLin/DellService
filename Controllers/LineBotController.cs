@@ -126,6 +126,7 @@ public class LineBotController : ControllerBase
                 if (account != null)
                 {
                     account.LineBotUserId = evt.Source.UserId;
+                    account.Nonce = string.Empty;
                     await _accountService.UpdateAccount(account);
                     var message = new LineMessage()
                     {
@@ -161,10 +162,47 @@ public class LineBotController : ControllerBase
         }
         return Ok();
     }
-    [HttpGet("Link")]
-    public IActionResult Link([FromQuery] string linkToken)
+    [Authorize]
+    [HttpGet("GetState")]
+    public async Task<bool> GetState()
     {
-        var nonce = Guid.NewGuid().ToString();
-        return Redirect($"https://access.line.me/dialog/bot/accountLink?linkToken={linkToken}&nonce={nonce}");
+        try
+        {
+            var account = await _accountService.GetAccount(User.Identity?.Name ?? "");
+            var accessToken = await _lineBotService.GetAccessTokenAsync();
+            return await _lineBotService.GetState(account, accessToken);
+
+        }
+        catch
+        {
+            throw;
+        }
+    }
+    [Authorize]
+    [HttpPost("SendMessagetoSelf")]
+    public async Task<bool> SendMessagetoSelf(string message)
+    {
+        try
+        {
+            var account = await _accountService.GetAccount(User.Identity?.Name ?? "");
+            var alreadLinkMessage = new LineMessage()
+            {
+                To = account.LineBotUserId!,
+                Messages = new List<LineMessage.Message>
+                            {
+                                new LineMessage.Message
+                                {
+                                    Type = "text",
+                                    Text = message
+                                }
+                            }
+            };
+            var accessToken = await _lineBotService.GetAccessTokenAsync();
+            return (await _lineBotService.PushMessageAsync(alreadLinkMessage, accessToken)) != null;
+        }
+        catch
+        {
+            throw;
+        }
     }
 }

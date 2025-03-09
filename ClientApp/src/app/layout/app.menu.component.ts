@@ -17,16 +17,17 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Line',
                 items: [
-                    { label: 'LineNotify', icon: 'pi pi-fw pi-comment', routerLink: ['/main/line/line-notify'] }
+                    // { label: 'LineNotify', icon: 'pi pi-fw pi-comment', routerLink: ['/main/line/line-notify'] },
+                    { label: 'LineBot', icon: 'pi pi-fw pi-comment', routerLink: ['/main/line/line-bot'] }
                 ]
             },
             {
-              label: 'Ptt',
-              items: [
-                  { label: 'Spider', icon: 'pi pi-fw pi-comment', routerLink: ['/main/ptt/search-rule'] },
-                  { label: 'Match', icon: 'pi pi-fw pi-comment', routerLink: ['/main/ptt/match-history'] }
-              ]
-          },
+                label: 'Ptt',
+                items: [
+                    { label: 'Spider', icon: 'pi pi-fw pi-comment', routerLink: ['/main/ptt/search-rule'] },
+                    { label: 'Match', icon: 'pi pi-fw pi-comment', routerLink: ['/main/ptt/match-history'] }
+                ]
+            },
         ];
     }
 }
