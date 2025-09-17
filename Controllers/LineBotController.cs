@@ -21,7 +21,8 @@ public class LineBotController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post(LineBotEvent lineBotEvent)
     {
-        // 解析 JSON 格式的 request body
+        // 解析 JSON 格式的 request 
+        System.Console.WriteLine("Request Body: " + lineBotEvent.ToString());
         _logger.LogInformation("Request Body: " + lineBotEvent.ToString());
         foreach (var evt in lineBotEvent.Events)
         {
@@ -82,7 +83,7 @@ public class LineBotController : ControllerBase
                                 new LineMessage.Message
                                 {
                                     Type = "template",
-                                    AltText = "註冊",
+                                    AltText = "請點選下方連結註冊",
                                     Template = new LineMessage.Template {
                                         Type = "buttons",
                                         Text = "註冊",
