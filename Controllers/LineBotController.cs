@@ -29,10 +29,10 @@ public class LineBotController : ControllerBase
                 _logger.LogWarning("LineBotController.Post - 接收到空的事件資料");
                 return BadRequest("無效的事件資料");
             }
-            
+
             // 記錄請求開始
             _logger.LogInformation("LineBotController.Post - 開始處理 LineBot 事件，事件數量: {EventCount}", lineBotEvent.Events.Count);
-            
+
             foreach (var evt in lineBotEvent.Events)
             {
                 if (evt.ReplyToken == null)
@@ -40,17 +40,17 @@ public class LineBotController : ControllerBase
                     _logger.LogWarning("LineBotController.Post - 事件缺少 ReplyToken，跳過處理");
                     continue;
                 }
-                
+
                 if (evt.Source?.UserId == null)
                 {
                     _logger.LogWarning("LineBotController.Post - 事件缺少 UserId，跳過處理");
                     continue;
                 }
-                
+
                 _logger.LogInformation("LineBotController.Post - 處理事件類型: {EventType}, UserId: {UserId}", evt.Type, evt.Source.UserId);
-                
+
                 var accessToken = await _lineBotService.GetAccessTokenAsync();
-                
+
                 if (evt.Type == "flow")
                 {
                     _logger.LogInformation("LineBotController.Post - 處理 flow 事件，建立新帳戶");
@@ -66,7 +66,7 @@ public class LineBotController : ControllerBase
                 {
                     var userId = evt.Source.UserId;
                     _logger.LogInformation("LineBotController.Post - 處理訊息事件，User ID: {UserId}, 訊息內容: {MessageText}", userId, evt.Message?.Text ?? "無訊息內容");
-                    
+
                     var account = await _accountService.GetAccountByLineBotUserId(userId);
                     if (account == null)
                     {
@@ -78,7 +78,7 @@ public class LineBotController : ControllerBase
                         };
                         account = await _accountService.AddAccount(newAccount);
                     }
-                    
+
                     if (evt.Message?.Text == "註冊")
                     {
                         if (account.LineId != null)
@@ -156,7 +156,7 @@ public class LineBotController : ControllerBase
                         _logger.LogWarning("LineBotController.Post - accountLink 事件缺少 Nonce");
                         continue;
                     }
-                    
+
                     _logger.LogInformation("LineBotController.Post - 處理帳戶連結事件，Nonce: {Nonce}", evt.Link.Nonce);
                     var account = await _accountService.GetAccountByNonce(evt.Link.Nonce);
                     if (account != null)
@@ -198,7 +198,7 @@ public class LineBotController : ControllerBase
                     }
                 }
             }
-            
+
             _logger.LogInformation("LineBotController.Post - 所有事件處理完成");
             return Ok();
         }
